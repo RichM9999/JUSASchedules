@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-lg navbar-dark navbar-nav-jusa">
+  <button class="navbar-toggler" type="button"
+        (click)="toggleNavbar()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  
+    <div class="collapse navbar-collapse"
+      [ngClass]="{ 'show': navbarOpen }">
+
+    <ul class="navbar-nav mr-auto">
+
+      <li class="nav-item">
+        <a class="nav-link" (click)="navbarClose()" routerLink="messageboard">Message Board</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" (click)="navbarClose()" routerLink="myschedule">My Schedule</a>
+      </li>
+
+      <li class="nav-item">
+          <a class="nav-link" (click)="navbarClose()" routerLink="schedules">Schedules</a>
+      </li>
+
+      <li class="nav-item">
+          <a class="nav-link" (click)="navbarClose()" routerLink="referees">Referees</a>
+      </li>
+
+      <li class="nav-item">
+          <a class="nav-link" (click)="navbarClose()" routerLink="myprofile">My Profile</a>
+      </li>
+
+      <li class="nav-item">
+          <a class="nav-link" (click)="navbarClose()" routerLink="administration">Administration</a>
+      </li>
+
+      <li class="nav-item">
+          <a class="nav-link" href="#">Logout</a>
+      </li>
+
+    </ul>
+  </div>
+</nav>

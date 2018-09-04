@@ -1,0 +1,15 @@
+.navbar-nav-jusa {
+    background-color: var(--jusa-dark) !important
+}
+
+.nav-link {
+    color: var(--jusa-dark-link) !important;
+    font-weight: bold;
+    padding-right: 2rem !important;
+}
+
+.nav-link:hover {
+    color: var(--jusa-dark-hover) !important;
+    font-weight: bold;
+    padding-right: 2rem !important;
+}

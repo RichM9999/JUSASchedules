@@ -1,0 +1,89 @@
+.gameGrid {
+    width: 100%;
+}
+
+.gameGrid th {
+    text-align: center;
+    vertical-align: top;
+    font-weight: bold;
+    background-color: var(--jusa-medium);
+    border-color: var(--palette-basis);
+    color: var(--jusa-medium-link);
+}
+
+.gameGrid td {
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    border-color: var(--palette-basis);
+}
+
+.gameRowOdd {
+    background-color: var(--jusa-row-odd);
+}
+.gameRowEven {
+    background-color: var(--jusa-row-even);
+}
+
+.gridTextSmall {
+    font-size: 0.75rem;
+}
+
+.selectedFilter {
+    background-color: var(--jusa-dark-hover);
+    color: #ffffff !important;
+}
+
+.sortHeader {
+    cursor: pointer;
+}
+
+.ng-select.custom, .ng-select.wide {
+    border:3px;
+    min-height: 0px;
+    border-radius: 5px;
+    
+}
+.ng-select.custom ::ng-deep .ng-select-container,
+.ng-select.wide ::ng-deep .ng-select-container  {            
+    background-color: var(--jusa-medium);
+    color: var(--jusa-font-bright);
+    font-size: 0.8rem;
+    font-weight: normal;
+    border-color: var(--jusa-dark);
+}
+
+.ng-select.custom ::ng-deep .ng-clear-wrapper,
+.ng-select.wide ::ng-deep .ng-clear-wrapper {
+    display: none;
+}
+
+.ng-select.custom ::ng-deep .ng-option,
+.ng-select.wide ::ng-deep .ng-option {
+    font-weight: normal;
+}
+
+.ng-select.custom ::ng-deep .ng-option-selected,
+.ng-select.wide ::ng-deep .ng-option-selected {
+    background-color: var(--jusa-medium);
+    color: var(--jusa-font-bright);
+}
+
+.ng-select.custom ::ng-deep .ng-option-marked,
+.ng-select.wide ::ng-deep .ng-option-marked {
+    background-color: var(--jusa-row-odd);
+    color: var(--jusa-dark);
+}
+
+.ng-select.custom ::ng-deep .ng-dropdown-panel {
+    width: auto !important;
+    text-align:left;
+    left: 2px;
+}
+
+.ng-select.wide ::ng-deep .ng-dropdown-panel {
+    width: 660px !important;
+    text-align:left;
+    left: 2px;
+}
+

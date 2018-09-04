@@ -1,0 +1,130 @@
+<table class="table table-bordered gameGrid">
+    <thead>
+        <tr>
+            <th class="sortHeader" style="width: 98px;" (click)="toggleOrderBy('gamenumber')">Game # <i class="fas" [class]="orderByIcon('gamenumber')"></i></th>
+            <th class="sortHeader" style="width: 99px;" (click)="toggleOrderBy('division')">Division <i class="fas" [class]="orderByIcon('division')"></i></th>
+            <th class="sortHeader" style="width: 88px;" (click)="toggleOrderBy('type')">Type <i class="fas" [class]="orderByIcon('type')"></i></th>
+            <th class="sortHeader" style="width: 135px;" (click)="toggleOrderBy('date')">Date <i class="fas" [class]="orderByIcon('date')"></i></th>
+            <th class="sortHeader" style="width: 108px;" (click)="toggleOrderBy('time')">Time <i class="fas" [class]="orderByIcon('time')"></i></th>
+            <th class="sortHeader" style="width: 230px;" (click)="toggleOrderBy('field')">Field <i class="fas" [class]="orderByIcon('field')"></i></th>
+            <th style="width: 220px;">Home</th>
+            <th style="width: 220px;">Away</th>
+            <th style="width: 240px;" colspan="2">Center</th>
+            <th style="width: 240px;" colspan="2">AR1</th>
+            <th style="width: 240px;" colspan="2">AR2</th>
+        </tr>
+        <tr>
+            <th>
+                <ng-select [items]="gameNumbers" dropdownPosition="down" bindLabel="gamenumber" bindValue="gamenumber" [(ngModel)]="gameNumber" class="custom" (change)="getGames()"></ng-select>
+            </th>
+            <th>
+                <ng-select [items]="gameDivisions" dropdownPosition="down" bindLabel="division" bindValue="division" [(ngModel)]="gameDivision" class="custom" (change)="getGames()"></ng-select>
+            </th>
+            <th>
+                <ng-select [items]="gameTypes" dropdownPosition="down" bindLabel="gametypeshortname" bindValue="gametypeshortname" [(ngModel)]="gameType" class="custom" (change)="getGames()"></ng-select>
+            </th>
+            <th>
+                <ng-select [items]="gameDates" dropdownPosition="down" bindLabel="gamedate" bindValue="gamedate" [(ngModel)]="gameDate" class="custom" (change)="getGames()"></ng-select>
+            </th>
+            <th>
+                <ng-select [items]="gameTimes" dropdownPosition="down" bindLabel="gametime" bindValue="gametime" [(ngModel)]="gameTime" class="custom" (change)="getGames()"></ng-select>
+            </th>
+            <th>
+                <ng-select [items]="gameFields" dropdownPosition="down" bindLabel="field" bindValue="field" [(ngModel)]="gameField" class="custom" (change)="getGames()"></ng-select>                
+            </th>
+            <th colspan="2">
+                <ng-select [items]="gameTeams" dropdownPosition="down" bindLabel="team" bindValue="team" [(ngModel)]="gameTeam" class="custom" (change)="getGames()"></ng-select>                
+            </th>
+            <th colspan="6">
+                <ng-select [items]="gameReferees" dropdownPosition="down" bindLabel="displayname" bindValue="sysid" [(ngModel)]="gameRefereeId" class="wide" (change)="getGames()"></ng-select>                
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let game of games; let i = index">
+            <tr [ngClass]="rowColor(game.field, i)">
+                <td [rowSpan]="game.gamenotes.length + 1">{{ game.gamenumber }}</td>
+                <td [rowSpan]="game.gamenotes.length + 1">{{ game.division }}</td>
+                <td [rowSpan]="game.gamenotes.length + 1">{{ game.gametypeshortname }}</td>
+                <td [rowSpan]="game.gamenotes.length + 1">{{ game.gamedate }}</td>
+                <td [rowSpan]="game.gamenotes.length + 1">{{ game.gametime }}</td>
+                <td *ngIf="game.fieldmapurl != null" 
+                        [rowSpan]="game.gamenotes.length + 1"
+                        style="cursor:help" 
+                        [ngbPopover]="fieldInfo"
+                        triggers="manual" #fieldpop="ngbPopover" (click)="toggleWithGame(fieldpop, game)"
+                        popoverTitle="{{ game.field }}" 
+                        container="body"
+                        placement="bottom">
+                    {{ game.field }}
+                </td>
+                <td *ngIf="game.fieldmapurl == null"  [rowSpan]="game.gamenotes.length + 1">{{ game.field }}</td>
+                <td [rowSpan]="game.gamenotes.length + 1">{{ game.home }}</td>
+                <td [rowSpan]="game.gamenotes.length + 1">{{ game.away }}</td>
+                <td *ngIf="game.numberofrefs != 2" [colSpan]="6 / game.numberofrefs">
+                    <span *ngIf="game.crid != null">
+                        {{ game.centername }}<BR />
+                        <span class="gridTextSmall">
+                            {{ game.crstatusname }} {{ game.crupdatedon | date:'M/dd/yyyy' }}<br />
+                            {{ game.crupdatedon | date:'h:mm:ss a' }}
+                        </span>
+                    </span>
+                    <span *ngIf="game.crid == null">
+                        <button class="btn btn-primary"><img src="images/whistle-icon.png" alt="">Select</button>
+                    </span>   
+                </td>
+                <td *ngIf="game.numberofrefs >= 2" [colSpan]="6 / game.numberofrefs">
+                    <span *ngIf="game.ar1id != null">
+                        {{ game.ar1name }}<BR />
+                        <span class="gridTextSmall">
+                            {{ game.ar1statusname }} {{ game.ar1updatedon | date:'M/dd/yyyy' }}<br />
+                            {{ game.ar1updatedon | date:'h:mm:ss a' }}
+                        </span>
+                    </span>
+                    <span *ngIf="game.ar1id == null && game.numberofrefs == 3">
+                        <button class="btn btn-primary"><img src="images/referee-flag-icon.png" alt="">Select</button>
+                    </span>
+                    <span *ngIf="game.ar1id == null && game.numberofrefs == 2">
+                        <button class="btn btn-primary"><img src="images/whistle-icon.png" alt="">Select</button>
+                    </span>
+                </td>
+                <td *ngIf="game.numberofrefs >= 2" [colSpan]="6 / game.numberofrefs">
+                    <span *ngIf="game.ar2id != null">
+                        {{ game.ar2name }}<BR />
+                        <span class="gridTextSmall">
+                            {{ game.ar2statusname }} {{ game.ar2updatedon | date:'M/dd/yyyy' }}<br />
+                            {{ game.ar2updatedon | date:'h:mm:ss a' }}
+                        </span>
+                    </span>
+                    <span *ngIf="game.ar2id == null && game.numberofrefs == 3">
+                        <button class="btn btn-primary"><img src="images/referee-flag-icon.png" alt="">Select</button>
+                    </span>
+                    <span *ngIf="game.ar2id == null && game.numberofrefs == 2">
+                            <button class="btn btn-primary"><img src="images/whistle-icon.png" alt="">Select</button>
+                        </span>
+                </td>
+            </tr>
+            <ng-container *ngIf="game.gamenotes.length > 0">
+                <tr *ngFor="let note of game.gamenotes">
+                    <td colspan="6" style="text-align:left;background-color:var(--jusa-highlight);padding-top:2px;padding-bottom:2px;height:30px">
+                        <B>{{ note.postedby }}: </B>{{ note.message }}
+                    </td>
+                </tr>
+            </ng-container>
+        </ng-container>
+    </tbody>
+</table>
+<div style="text-align:center">
+    <B>Total games:</B> {{ games.length }} |
+    <B>Total spots:</B> {{ totalSpots() }} |
+    <B>Open spots:</B>  {{ openSpots() }}
+</div>
+<div style="text-align:center">
+    <B>Open centers:</B> {{ openCenters() }} |
+    <B>Open ARs:</B> {{ openARs() }} |
+    <B>Open Two-mans:</B>  {{ openTwoMans() }}
+</div>
+<ng-template #fieldInfo let-game='game'>
+    <h5>{{game.fieldaddress}}</h5><BR />
+    <a href='{{game.fieldmapurl}}' target='_blank'><h5><i class="fas fa-map-marker-alt"></i> Map & Diagram</h5></a>
+</ng-template>

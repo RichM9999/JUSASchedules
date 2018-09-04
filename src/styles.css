@@ -1,0 +1,34 @@
+:root {
+    /* 
+        https://coolors.co/00a5e5-395f85-029cde-d5edfb-a1c8d0 
+    */
+
+    --palette-basis: #00a5e5;
+
+    --jusa-dark: #203449;
+    --jusa-dark-link: #ffffff;
+    --jusa-dark-hover: #00a5e5;
+
+    --jusa-medium: #0272a2;
+    --jusa-medium-link: #ffffff;
+    --jusa-medium-hover: #ffffff;
+
+    --jusa-row-odd: #d1edf9;
+    --jusa-row-even: #ffffff;
+
+    --jusa-font-bright: #ffffff;
+    --jusa-font-medium: #00a5e5;
+
+    --jusa-highlight: #e8ff0d;
+}
+
+.btn-primary {
+    background-color: var(--jusa-medium) !important;
+    
+}
+
+.btn-primary:hover {
+    background-color: var(--jusa-dark-hover) !important;
+}
+
+
