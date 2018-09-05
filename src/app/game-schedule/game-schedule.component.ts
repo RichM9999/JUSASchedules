@@ -21,8 +21,8 @@ import { GameTeam } from '../models/gameTeam.model';
 import { GameReferee } from '../models/gameReferee.model';
 
 import { enableProdMode } from '@angular/core';
-import {FormControl, FormGroup, ReactiveFormsModule, FormsModule} from '@angular/forms';
-import {NgSelectModule, NgOption} from '@ng-select/ng-select';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, NgModel } from '@angular/forms';
+import { NgSelectModule, NgOption } from '@ng-select/ng-select';
 import { AppComponent } from '../app.component';
 
 enableProdMode();
@@ -33,20 +33,6 @@ enableProdMode();
   styleUrls: ['./game-schedule.component.css']
 })
 export class GameScheduleComponent {
-
-  constructor(private gameService: GameDataService
-    , private gameNumberService: GameNumberDataService
-    , private gameDivisionService: GameDivisionDataService
-    , private gameTypeService: GameTypeDataService
-    , private gameDateService: GameDateDataService
-    , private gameTimeService: GameTimeDataService
-    , private gameFieldService: GameFieldDataService
-    , private gameTeamService: GameTeamDataService
-    , private gameRefereeService: GameRefereeDataService
-    ) {  
-      this.getFilters();
-      this.getGames(); 
-    }
 
   title = 'JUSA Referee Schedules';
 
@@ -62,6 +48,7 @@ export class GameScheduleComponent {
   gameReferees: GameReferee[] = [];
 
   orderBy: string = "field";
+
   gameNumber: string = "(any)";
   gameDivision: string = "(any)";
   gameType: string = "(any)";
@@ -69,28 +56,35 @@ export class GameScheduleComponent {
   gameTime: string = "(any)";
   gameField: string = "(any)";
   gameTeam: string = "(any)";
-  gameReferee: string = "(any)";
   gameRefereeId: number = 0;
+
   lastValue: string = "";
   isOdd: boolean = false;
 
+  constructor(private gameService: GameDataService
+      , private gameNumberService: GameNumberDataService
+      , private gameDivisionService: GameDivisionDataService
+      , private gameTypeService: GameTypeDataService
+      , private gameDateService: GameDateDataService
+      , private gameTimeService: GameTimeDataService
+      , private gameFieldService: GameFieldDataService
+      , private gameTeamService: GameTeamDataService
+      , private gameRefereeService: GameRefereeDataService
+    )
+    {
+    this.getFilters();
+    this.getGames();
+    }
+
   getFilters() {
-    this.gameNumberService.getNumbers()
-      .subscribe(g => this.gameNumbers = g)
-    this.gameDivisionService.getDivisions()
-      .subscribe(g => this.gameDivisions = g)
-    this.gameTypeService.getTypes()
-      .subscribe(g => this.gameTypes = g)
-    this.gameDateService.getDates()
-      .subscribe(g => this.gameDates = g)
-    this.gameTimeService.getTimes()
-      .subscribe(g => this.gameTimes = g)
-    this.gameFieldService.getFields()
-      .subscribe(g => this.gameFields = g)
-    this.gameTeamService.getTeams()
-      .subscribe(g => this.gameTeams = g)
-    this.gameRefereeService.getReferees()
-      .subscribe(g => this.gameReferees = g)
+      this.gameNumberService.getNumbers().subscribe(g => this.gameNumbers = g);
+      this.gameDivisionService.getDivisions().subscribe(g => this.gameDivisions = g);
+      this.gameTypeService.getTypes().subscribe(g => this.gameTypes = g);
+      this.gameDateService.getDates().subscribe(g => this.gameDates = g);
+      this.gameTimeService.getTimes().subscribe(g => this.gameTimes = g);
+      this.gameFieldService.getFields().subscribe(g => this.gameFields = g);
+      this.gameTeamService.getTeams().subscribe(g => this.gameTeams = g);
+      this.gameRefereeService.getReferees().subscribe(g => this.gameReferees = g);
   }
 
   getGames() {
@@ -116,7 +110,7 @@ export class GameScheduleComponent {
 
     if (this.isOdd)
       return "gameRowOdd";
-    else 
+    else
       return "gameRowEven";
   }
 
@@ -189,7 +183,7 @@ export class GameScheduleComponent {
     });
     return cnt;
   }
-  
+
   totalSpots(): number {
     var cnt = 0;
 

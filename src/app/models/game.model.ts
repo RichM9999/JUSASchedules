@@ -57,10 +57,10 @@ export interface Game {
   numberofrefs: number;
   stampupdatedon: string;
   nonjusafield: boolean;
-  gamenotes: {
+  gamenotes: [{
     postedbyid: number;
     postedby: string;
     message: string;
     postedon: string;
-  }
+  }]
 }

@@ -13,3 +13,13 @@
     font-weight: bold;
     padding-right: 2rem !important;
 }
+
+.session-bar {
+    border-top: 2px solid var(--jusa-dark);
+    text-align:right;
+    background-color: var(--palette-basis);
+    padding-top:5px;
+    padding-bottom: 10px;
+    color: var(--jusa-font-bright);
+    font-weight: 500;
+}

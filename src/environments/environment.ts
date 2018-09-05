@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  keyUrl: "https://jusareferees.org/scheduler/api/key.php",
+  apiUrl: "https://jusareferees.org/scheduler/api/"
 };
 
 /*

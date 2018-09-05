@@ -4,19 +4,19 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { GameDivision } from '../../models/gameDivision.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameDivisionDataService {
-  private api = 'https://jusareferees.org/scheduler/api/';
 
   constructor(private http: HttpClient) { }
 
   getDivisions(): Observable<GameDivision[]> {
     return this.http
       .get(
-        `${this.api}getGameDivisions.php`
+        `${environment.apiUrl}getGameDivisions.php`
       )
       .pipe(
         map((response: any) => response.value)

@@ -1,3 +1,13 @@
+<div *ngIf="isAuthenticated()" class="session-bar">
+    <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-7"> </div>
+          <div class="col-md-5">
+            {{ currentUser.seasonname }} | {{ currentUser.displayname }} 
+          </div>
+      </div>
+    </div>
+  </div>
 <nav class="navbar navbar-expand-lg navbar-dark navbar-nav-jusa">
   <button class="navbar-toggler" type="button"
         (click)="toggleNavbar()">
@@ -10,33 +20,36 @@
     <ul class="navbar-nav mr-auto">
 
       <li class="nav-item">
-        <a class="nav-link" (click)="navbarClose()" routerLink="messageboard">Message Board</a>
+        <a class="nav-link" *ngIf="!isAuthenticated()" (click)="navbarClose()" routerLink="login">Login</a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" (click)="navbarClose()" routerLink="myschedule">My Schedule</a>
+        <a class="nav-link" *ngIf="isAuthenticated()" (click)="navbarClose()" routerLink="messageboard">Message Board</a>
       </li>
 
       <li class="nav-item">
-          <a class="nav-link" (click)="navbarClose()" routerLink="schedules">Schedules</a>
+        <a class="nav-link" *ngIf="isAuthenticated()" (click)="navbarClose()" routerLink="myschedule">My Schedule</a>
       </li>
 
       <li class="nav-item">
-          <a class="nav-link" (click)="navbarClose()" routerLink="referees">Referees</a>
+          <a class="nav-link" *ngIf="isAuthenticated()" (click)="navbarClose()" routerLink="schedules">Schedules</a>
       </li>
 
       <li class="nav-item">
-          <a class="nav-link" (click)="navbarClose()" routerLink="myprofile">My Profile</a>
+          <a class="nav-link" *ngIf="isAuthenticated()" (click)="navbarClose()" routerLink="referees">Referees</a>
       </li>
 
       <li class="nav-item">
-          <a class="nav-link" (click)="navbarClose()" routerLink="administration">Administration</a>
+          <a class="nav-link" *ngIf="isAuthenticated()" (click)="navbarClose()" routerLink="myprofile">My Profile</a>
       </li>
 
       <li class="nav-item">
-          <a class="nav-link" href="#">Logout</a>
+          <a class="nav-link" *ngIf="isSuperAdmin()" (click)="navbarClose()" routerLink="administration">Administration</a>
       </li>
 
+      <li class="nav-item">
+          <a class="nav-link" *ngIf="isAuthenticated()" (click)="navbarClose()" routerLink="logout">Logout</a>
+      </li>
     </ul>
   </div>
 </nav>

@@ -1,5 +1,6 @@
 import { TestBed, async } from '@angular/core/testing';
-import { GameScheduleComponent } from './gameSchedule.component';
+import { GameScheduleComponent } from './game-schedule.component';
+
 describe('GameScheduleComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({

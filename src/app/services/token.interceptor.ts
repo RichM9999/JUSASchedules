@@ -2,22 +2,23 @@ import { HttpInterceptor, HttpHandler, HttpEvent, HttpRequest, HttpClient, HttpH
 import { Observable, of } from 'rxjs';
 import { Injectable } from "@angular/core";
 import { tap, map, catchError, flatMap } from "rxjs/operators";
+import { environment } from '../../environments/environment';
+import { AuthenticationService } from '../services/authentication.service'; 
 
-const AuthUrl: string = 'https://jusareferees.org/scheduler/api/key.php';
-const TokenName: string = 'bearer-token';
+const TokenName: string = 'currentUser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenInterceptor implements HttpInterceptor {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
 
   /**
    * This intercepts all http calls made and adds an auth token to the request header. 
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url === AuthUrl) {
+    if (req.url === environment.keyUrl) {
       return next.handle(req);
     }
 
@@ -31,9 +32,9 @@ export class TokenInterceptor implements HttpInterceptor {
         catchError((error: any) => {
           if (error instanceof HttpErrorResponse) {          
             if (error.status === 401) {
-              return this.requestToken().pipe(flatMap(token => {
-                return next.handle(this.addToken(req, this.getToken()));
-              }));
+              // auto logout if 401 response returned from api
+              this.authenticationService.logout();
+              location.reload(true);               
             }
             return Observable.throw(error);
           }
@@ -47,27 +48,13 @@ export class TokenInterceptor implements HttpInterceptor {
 
   private getToken(): string {
     const currentSession = JSON.parse(localStorage.getItem(TokenName));
-    return currentSession && currentSession.token;
+    return currentSession && currentSession.access_token;
   }
 
   private requestToken(): Observable<string> {
     const currentSession = JSON.parse(localStorage.getItem(TokenName));
-    if (currentSession && !!currentSession.token && new Date(currentSession.expiresAt) > new Date()) {
-      return of(currentSession.token);
+    if (currentSession && !!currentSession.access_token && new Date(currentSession.expiration * 1000) > new Date()) {
+      return of(currentSession.access_token);
     }
-
-    let headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
-    let params = `grant_type=password&username=kmabry&password=1025`;
-
-    return this.http
-      .post(AuthUrl, params, { headers: headers })
-      .pipe(
-        tap((r: any) => {
-          localStorage.setItem(TokenName, JSON.stringify({
-            token: r.access_token,
-            expiresAt: new Date(new Date().getTime() + r.expires_in * 1000)
-          }));
-        }),
-        map((r: any) => r.access_token));
   }
 }
