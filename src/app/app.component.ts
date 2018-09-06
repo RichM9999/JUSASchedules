@@ -12,8 +12,8 @@ import { User } from './models/user';
 export class AppComponent {
   title = "JUSA Referee Schdedules";
   currentUser: User;
-
-  constructor() {
+ 
+  constructor( ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 }

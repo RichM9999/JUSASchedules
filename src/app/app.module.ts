@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './services/token.interceptor';
 import { DataTableModule } from "angular-6-datatable";
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 import { NgSelectModule, NgSelectComponent } from '@ng-select/ng-select';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -36,7 +37,8 @@ import { LogoutComponent } from './logout';
     FormsModule,
     DataTableModule,
     RoutingModule,
-    NgSelectModule
+    NgSelectModule,
+    Ng4LoadingSpinnerModule.forRoot()
   ],
   declarations: [
     AppComponent,

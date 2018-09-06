@@ -72,8 +72,8 @@ export class GameScheduleComponent {
       , private gameRefereeService: GameRefereeDataService
     )
     {
-    this.getFilters();
-    this.getGames();
+      this.getFilters();
+      this.getGames();
     }
 
   getFilters() {

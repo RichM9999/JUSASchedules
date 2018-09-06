@@ -4,6 +4,7 @@ import { Injectable } from "@angular/core";
 import { tap, map, catchError, flatMap } from "rxjs/operators";
 import { environment } from '../../environments/environment';
 import { AuthenticationService } from '../services/authentication.service'; 
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 const TokenName: string = 'currentUser';
 
@@ -12,7 +13,12 @@ const TokenName: string = 'currentUser';
 })
 export class TokenInterceptor implements HttpInterceptor {
 
-  constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
+  private count: number = 0;
+
+  constructor(private http: HttpClient
+      , private authenticationService: AuthenticationService
+      , private spinnerService: Ng4LoadingSpinnerService
+    ) { }
 
   /**
    * This intercepts all http calls made and adds an auth token to the request header. 
@@ -22,6 +28,11 @@ export class TokenInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
+    this.count++;
+
+    if (this.count == 1) 
+      this.spinnerService.show();
+
     return next.handle(this.addToken(req, this.getToken()))
       .pipe(
         map((event: HttpEvent<any>) => {
@@ -30,6 +41,8 @@ export class TokenInterceptor implements HttpInterceptor {
           }
         }),
         catchError((error: any) => {
+          this.count--;
+
           if (error instanceof HttpErrorResponse) {          
             if (error.status === 401) {
               // auto logout if 401 response returned from api
@@ -38,6 +51,13 @@ export class TokenInterceptor implements HttpInterceptor {
             }
             return Observable.throw(error);
           }
+        }),
+        tap((event: HttpEvent<any>) => {
+          if (event instanceof HttpResponse) { 
+            this.count--;
+            if (this.count==0)
+               this.spinnerService.hide();
+         }
         })
       );
   }

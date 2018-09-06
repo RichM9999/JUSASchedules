@@ -69,4 +69,7 @@ export interface Game {
   fieldchanged: boolean;
   homechanged: boolean;
   awaychanged: boolean;
+  cancenter: string;
+  canAR1: string;
+  canAR2: string;
 }
