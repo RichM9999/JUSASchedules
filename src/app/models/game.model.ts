@@ -62,5 +62,11 @@ export interface Game {
     postedby: string;
     message: string;
     postedon: string;
-  }]
+  }];
+  divisionchanged: boolean;
+  gamedatechanged: boolean;
+  gametimechanged: boolean;
+  fieldchanged: boolean;
+  homechanged: boolean;
+  awaychanged: boolean;
 }

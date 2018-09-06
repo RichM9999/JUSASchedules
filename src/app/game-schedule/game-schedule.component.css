@@ -24,6 +24,10 @@
     background-color: var(--jusa-row-even);
 }
 
+.gameCellChanged {
+    background-color: var(--jusa-highlight);
+}
+
 .gridTextSmall {
     font-size: 0.75rem;
 }
@@ -85,4 +89,7 @@
     text-align:left;
     left: 2px;
 }
-
+.gameDenied {
+    cursor:pointer;
+    color: red;
+}

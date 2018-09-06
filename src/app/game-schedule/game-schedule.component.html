@@ -43,22 +43,33 @@
     <tbody>
         <ng-container *ngFor="let game of games; let i = index">
             <tr [ngClass]="rowColor(game.field, i)">
-                <td [rowSpan]="game.gamenotes.length + 1">{{ game.gamenumber }}</td>
-                <td [rowSpan]="game.gamenotes.length + 1">{{ game.division }}</td>
+                <td [rowSpan]="game.gamenotes.length + 1">
+                    {{ game.gamenumber }}
+                </td>
+                <td [rowSpan]="game.gamenotes.length + 1">
+                    <span [ngClass]="getCellClassChanged(game.divisionchanged)">{{ game.division }}</span>
+                </td>
                 <td [rowSpan]="game.gamenotes.length + 1">{{ game.gametypeshortname }}</td>
-                <td [rowSpan]="game.gamenotes.length + 1">{{ game.gamedate }}</td>
-                <td [rowSpan]="game.gamenotes.length + 1">{{ game.gametime }}</td>
+                <td [rowSpan]="game.gamenotes.length + 1">
+                    <span [ngClass]="getCellClassChanged(game.gamedatechanged)">{{ game.gamedate }}</span>
+                </td>
+                <td [rowSpan]="game.gamenotes.length + 1">
+                    <span [ngClass]="getCellClassChanged(game.gametimechanged)">{{ game.gametime }}</span>
+                </td>
                 <td *ngIf="game.fieldmapurl != null" 
                         [rowSpan]="game.gamenotes.length + 1"
                         style="cursor:help" 
                         [ngbPopover]="fieldInfo"
+                        popoverClass="fieldpopover"
                         triggers="manual" #fieldpop="ngbPopover" (click)="toggleWithGame(fieldpop, game)"
                         popoverTitle="{{ game.field }}" 
                         container="body"
                         placement="bottom">
-                    {{ game.field }}
+                    <span [ngClass]="getCellClassChanged(game.fieldchanged)">{{ game.field }}</span>
                 </td>
-                <td *ngIf="game.fieldmapurl == null"  [rowSpan]="game.gamenotes.length + 1">{{ game.field }}</td>
+                <td *ngIf="game.fieldmapurl == null"  [rowSpan]="game.gamenotes.length + 1">
+                    <span [ngClass]="getCellClassChanged(game.fieldchanged)">{{ game.field }}</span>
+                </td>
                 <td [rowSpan]="game.gamenotes.length + 1">{{ game.home }}</td>
                 <td [rowSpan]="game.gamenotes.length + 1">{{ game.away }}</td>
                 <td *ngIf="game.numberofrefs != 2" [colSpan]="6 / game.numberofrefs">
@@ -69,10 +80,13 @@
                             {{ game.crupdatedon | date:'h:mm:ss a' }}
                         </span>
                     </span>
-                    <span *ngIf="game.crid == null">
+                    <span *ngIf="game.crid == null && game.cancenter.length == 0">
                         <button class="btn btn-primary"><img src="images/whistle-icon.png" alt="">Select</button>
                     </span>   
-                </td>
+                    <span *ngIf="game.crid == null && game.cancenter.length != 0">
+                        <i class="fas fa-ban gameDenied" ngbTooltip="{{ game.cancenter }}"></i>
+                    </span>   
+                    </td>
                 <td *ngIf="game.numberofrefs >= 2" [colSpan]="6 / game.numberofrefs">
                     <span *ngIf="game.ar1id != null">
                         {{ game.ar1name }}<BR />
@@ -81,11 +95,14 @@
                             {{ game.ar1updatedon | date:'h:mm:ss a' }}
                         </span>
                     </span>
-                    <span *ngIf="game.ar1id == null && game.numberofrefs == 3">
+                    <span *ngIf="game.ar1id == null && game.numberofrefs == 3 && game.canAR1.length == 0">
                         <button class="btn btn-primary"><img src="images/referee-flag-icon.png" alt="">Select</button>
                     </span>
-                    <span *ngIf="game.ar1id == null && game.numberofrefs == 2">
+                    <span *ngIf="game.ar1id == null && game.numberofrefs == 2 && game.canAR1.length == 0">
                         <button class="btn btn-primary"><img src="images/whistle-icon.png" alt="">Select</button>
+                    </span>
+                    <span *ngIf="game.ar1id == null && game.canAR1.length != 0">
+                        <i class="fas fa-ban gameDenied" ngbTooltip="{{ game.canAR1 }}"></i>
                     </span>
                 </td>
                 <td *ngIf="game.numberofrefs >= 2" [colSpan]="6 / game.numberofrefs">
@@ -96,12 +113,15 @@
                             {{ game.ar2updatedon | date:'h:mm:ss a' }}
                         </span>
                     </span>
-                    <span *ngIf="game.ar2id == null && game.numberofrefs == 3">
+                    <span *ngIf="game.ar2id == null && game.numberofrefs == 3 && game.canAR2.length == 0">
                         <button class="btn btn-primary"><img src="images/referee-flag-icon.png" alt="">Select</button>
                     </span>
-                    <span *ngIf="game.ar2id == null && game.numberofrefs == 2">
+                    <span *ngIf="game.ar2id == null && game.numberofrefs == 2 && game.canAR2.length == 0">
                             <button class="btn btn-primary"><img src="images/whistle-icon.png" alt="">Select</button>
-                        </span>
+                    </span>
+                    <span *ngIf="game.ar2id == null && game.canAR2.length != 0">
+                        <i class="fas fa-ban gameDenied" ngbTooltip="{{ game.canAR2 }}"></i>
+                    </span>
                 </td>
             </tr>
             <ng-container *ngIf="game.gamenotes.length > 0">
@@ -125,6 +145,13 @@
     <B>Open Two-mans:</B>  {{ openTwoMans() }}
 </div>
 <ng-template #fieldInfo let-game='game'>
-    <h5>{{game.fieldaddress}}</h5><BR />
-    <a href='{{game.fieldmapurl}}' target='_blank'><h5><i class="fas fa-map-marker-alt"></i> Map & Diagram</h5></a>
+    <h6>
+        <a href='{{ getMapUrl(game.fieldaddress) }}' target='_blank'><i class="fas fa-map-marker-alt"></i></a>
+        <a href='{{ getMapUrl(game.fieldaddress) }}' target='_blank'> {{game.fieldaddress}}</a>
+    </h6>
+    <br />
+    <h6>
+        <a href='{{game.fieldmapurl}}' target='_blank'><i class="fas fa-th-large"></i></a>
+        <a href='{{game.fieldmapurl}}' target='_blank'> Diagram</a>
+    </h6>
 </ng-template>

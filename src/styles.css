@@ -20,6 +20,7 @@
     --jusa-font-medium: #00a5e5;
 
     --jusa-highlight: #e8ff0d;
+    --jusa-highlight-soft: #f9ffbe;
 }
 
 .btn-primary {
@@ -52,4 +53,12 @@
     font-weight: bold;
     height: 100px;
     text-shadow: 8px 8px 8px var(--jusa-dark);
+}
+
+.fieldpopover {
+    max-width: 700px !important;
+}
+.popover-header {
+    font-size: 1.25em !important;
+    text-align: center;
 }

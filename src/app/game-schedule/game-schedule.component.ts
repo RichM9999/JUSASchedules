@@ -204,4 +204,16 @@ export class GameScheduleComponent {
       popover.open({game});
     }
   }
+
+  getCellClassChanged(changed: boolean): string {
+    if (changed) {
+      return "gameCellChanged";
+    } else {
+      return "";
+    }
+  }
+
+  getMapUrl(address: string): string {
+    return "https://www.google.com/maps/place/" + encodeURI(address);
+  }
 }
