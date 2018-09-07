@@ -27,6 +27,9 @@ import { RefereeListComponent } from './referee-list/referee-list.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import { AdministrationComponent } from './administration/administration.component'
 import { LogoutComponent } from './logout';
+import { AnnouncementsComponent } from './announcements/announcements.component';
+import { MyNextGamesComponent } from './my-next-games/my-next-games.component';
+import { OpenSpotsComponent } from './open-spots/open-spots.component';
 
 @NgModule({
   imports: [
@@ -52,7 +55,10 @@ import { LogoutComponent } from './logout';
     GameScheduleComponent,
     RefereeListComponent,
     MyProfileComponent,
-    AdministrationComponent
+    AdministrationComponent,
+    AnnouncementsComponent,
+    MyNextGamesComponent,
+    OpenSpotsComponent
   ],
   providers: [
     AuthGuard,

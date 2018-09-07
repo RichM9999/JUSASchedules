@@ -40,6 +40,7 @@
     margin: 0px;
     padding: 0px;
     overflow:hidden;
+    border-top: 2px solid var(--jusa-medium);
 }
 .main-logo {
     padding-top: 0px;
@@ -61,4 +62,38 @@
 .popover-header {
     font-size: 1.25em !important;
     text-align: center;
+}
+
+.gameRowOdd {
+    background-color: var(--jusa-row-odd);
+}
+.gameRowEven {
+    background-color: var(--jusa-row-even);
+}
+
+.gameGrid {
+    width: 100%;
+}
+.gameGrid th {
+    text-align: center;
+    vertical-align: top;
+    font-weight: bold;
+    background-color: var(--jusa-medium) !important;
+    border-color: var(--palette-basis) !important;
+    color: var(--jusa-medium-link);
+}
+
+.gameGrid td {
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    border-color: var(--palette-basis)  !important;
+}
+
+.gameCellChanged {
+    background-color: var(--jusa-highlight);
+}
+
+.gridTextSmall {
+    font-size: 0.75rem;
 }

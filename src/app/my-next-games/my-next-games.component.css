@@ -1,0 +1,6 @@
+.gameGrid {
+    border: 0px;
+}
+.gameGrid td {
+    height: auto !important;
+}

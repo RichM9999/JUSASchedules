@@ -1,0 +1,7 @@
+.announcementDiv {
+    border: 1px solid;
+    border-color: var(--jusa-medium) !important;
+    padding:5px;
+    overflow: hidden;
+    width: 100%;
+}

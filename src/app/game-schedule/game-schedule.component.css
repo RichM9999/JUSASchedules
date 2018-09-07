@@ -1,37 +1,3 @@
-.gameGrid {
-    width: 100%;
-}
-.gameGrid th {
-    text-align: center;
-    vertical-align: top;
-    font-weight: bold;
-    background-color: var(--jusa-medium);
-    border-color: var(--palette-basis);
-    color: var(--jusa-medium-link);
-}
-
-.gameGrid td {
-    height: 60px;
-    text-align: center;
-    vertical-align: middle;
-    border-color: var(--palette-basis);
-}
-
-.gameRowOdd {
-    background-color: var(--jusa-row-odd);
-}
-.gameRowEven {
-    background-color: var(--jusa-row-even);
-}
-
-.gameCellChanged {
-    background-color: var(--jusa-highlight);
-}
-
-.gridTextSmall {
-    font-size: 0.75rem;
-}
-
 .selectedFilter {
     background-color: var(--jusa-dark-hover);
     color: #ffffff !important;

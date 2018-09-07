@@ -1,5 +1,7 @@
-<app-navbar [currentUser]="currentUser"></app-navbar>
 <div>
-  <router-outlet></router-outlet>
+  <app-navbar [currentUser]="currentUser"></app-navbar>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
 </div>
 <ng4-loading-spinner loadingText="Loading..."> </ng4-loading-spinner>

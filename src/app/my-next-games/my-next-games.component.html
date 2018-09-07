@@ -1,0 +1,23 @@
+<h5>My Next Games (<a routerLink="/myschedule">full list <i class="fas fa-arrow-right"></i></a>)</h5>
+<table class="table gameGrid table-responsive table-bordered">
+  <thead>
+      <tr>
+          <th>Division</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Field</th>
+          <th>Position</th>
+      </tr>
+  </thead>
+  <tbody>
+      <ng-container *ngFor="let game of myNextGames; let i = index">
+          <tr [ngClass]="rowColor(i)">
+              <td>{{ game.division }}</td>
+              <td>{{ game.gamedate }}</td>
+              <td>{{ game.gametime }}</td>
+              <td>{{ game.field }}</td>
+              <td>{{ game.position }}</td>
+          </tr>
+      </ng-container>
+  </tbody>
+</table>       
