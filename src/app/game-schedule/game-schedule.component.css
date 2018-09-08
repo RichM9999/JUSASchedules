@@ -1,3 +1,6 @@
+.gameTable {
+    min-height: 75vh !important;
+}
 .selectedFilter {
     background-color: var(--jusa-dark-hover);
     color: #ffffff !important;
@@ -58,4 +61,9 @@
 .gameDenied {
     cursor:pointer;
     color: red;
+}
+.refreshbutton {
+    float:right;
+    cursor:pointer;
+    height:100%;
 }

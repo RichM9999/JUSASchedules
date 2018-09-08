@@ -1,0 +1,56 @@
+.btn-spaced {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+    margin-right:3px;
+    font-size: 0.75rem;
+    width:110px;
+}
+.btn-spaced2 {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+    margin-right:3px;
+    font-size: 0.75rem;
+    width:65px;
+}
+.btn-spaced3 {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+    margin-right:3px;
+    font-size: 0.75rem;
+    width:80px;
+}
+.btn-row {
+    text-align: left;
+}
+.smallType {
+    font-size:0.65rem;
+}
+.table-bordered {
+    border: 0px !important;
+    font-size:1rem;
+}
+.table-bordered tr {
+    border-left: 1px solid var(--jusa-medium) !important;
+    border-right: 1px solid var(--jusa-medium) !important;
+
+}
+.statusnow {
+    background-color: var(--jusa-success-darker);
+    font-weight:bold;
+}
+.statusfull {
+    background-color: #b3b3b3;
+    font-weight:bold;
+}
+.statusfuture {
+    background-color: var(--jusa-error);
+    font-weight:bold;
+}
+.statuslevel {
+    background-color:  var(--jusa-error-darker);
+    font-weight:bold;
+}
+.statusdisabled {
+    background-color:  var(--jusa-error-darkest);
+    font-weight:bold;
+}

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { GameDataService } from '../services/game-data.service'
 import { GameNumberDataService } from '../services/filters/gameNumber-data.service';
@@ -9,6 +10,7 @@ import { GameTimeDataService } from '../services/filters/gameTime-data.service';
 import { GameFieldDataService } from '../services/filters/gameField-data.service';
 import { GameTeamDataService } from '../services/filters/gameTeam-data.service';
 import { GameRefereeDataService } from '../services/filters/gameReferee-data.service';
+import { GameSignupService } from "../services/game-signup.service";
 
 import { Game } from '../models/game.model';
 import { GameNumber } from '../models/gameNumber.model';
@@ -19,6 +21,8 @@ import { GameTime } from '../models/gameTime.model';
 import { GameField } from '../models/gameField.model';
 import { GameTeam } from '../models/gameTeam.model';
 import { GameReferee } from '../models/gameReferee.model';
+import { User } from '../models/user';
+import { SignupResponse } from '../models/signupResponse';
 
 import { enableProdMode } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, NgModel } from '@angular/forms';
@@ -32,7 +36,7 @@ enableProdMode();
   templateUrl: './game-schedule.component.html',
   styleUrls: ['./game-schedule.component.css']
 })
-export class GameScheduleComponent {
+export class GameScheduleComponent implements OnInit {
 
   title = 'JUSA Referee Schedules';
 
@@ -52,14 +56,16 @@ export class GameScheduleComponent {
   gameNumber: string = "(any)";
   gameDivision: string = "(any)";
   gameType: string = "(any)";
-  gameDate: string = "(next Saturday)";
+  gameDate: string;
   gameTime: string = "(any)";
   gameField: string = "(any)";
   gameTeam: string = "(any)";
-  gameRefereeId: number = 0;
+  gameRefereeId: number;
 
   lastValue: string = "";
   isOdd: boolean = false;
+
+  currentUser: User;
 
   constructor(private gameService: GameDataService
       , private gameNumberService: GameNumberDataService
@@ -70,11 +76,18 @@ export class GameScheduleComponent {
       , private gameFieldService: GameFieldDataService
       , private gameTeamService: GameTeamDataService
       , private gameRefereeService: GameRefereeDataService
+      , private router: ActivatedRoute
+      , private gameSignupService: GameSignupService
     )
-    {
-      this.getFilters();
-      this.getGames();
+    {    
+      this.gameDate = this.router.snapshot.params.gamedate;
+      this.gameRefereeId = +this.router.snapshot.params.refereeid;
     }
+
+  ngOnInit() {
+    this.getFilters();
+    this.getGames();
+  }
 
   getFilters() {
       this.gameNumberService.getNumbers().subscribe(g => this.gameNumbers = g);
@@ -215,5 +228,41 @@ export class GameScheduleComponent {
 
   getMapUrl(address: string): string {
     return "https://www.google.com/maps/place/" + encodeURI(address);
+  }
+
+  isAdmin() {
+    if (!this.currentUser)
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    return this.currentUser.isadmin;
+  }
+
+  doSignup(event: Event, gameid: number, position: string) {
+    var button = (event.target || event.srcElement || event.currentTarget) as HTMLElement;
+    this.gameSignupService.doSignup(gameid, position)
+      .subscribe(r => 
+        this.processSignup(button, r)
+      );
+  }
+
+  processSignup(button: HTMLElement, response: SignupResponse) {
+    if (!this.currentUser)
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    var parent = button.parentElement;
+    if (parent.classList.contains("btn")) {
+      parent = parent.parentElement;
+    }
+
+    if (!response.allowed) {
+      parent.innerHTML= `<span style='color:red'>${response.reason}</span>`;
+    } else {
+      parent.innerHTML = `${this.currentUser.displayname}<BR />
+      <span class="gridTextSmall">
+          ${response.statusname} ${response.statusupdatedon}
+      </span>`;
+    }
+    button.remove();
+   
   }
 }

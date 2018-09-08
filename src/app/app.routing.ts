@@ -14,7 +14,7 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'messageboard', component: MessageBoardComponent, canActivate: [AuthGuard] },
     { path: 'myschedule', component: MyScheduleComponent, canActivate: [AuthGuard] },
-    { path: 'schedules', component: GameScheduleComponent, canActivate: [AuthGuard] },
+    { path: 'schedules/:gamedate/:refereeid', component: GameScheduleComponent, canActivate: [AuthGuard] },
     { path: 'referees', component: RefereeListComponent, canActivate: [AuthGuard] },
     { path: 'myprofile', component: MyProfileComponent, canActivate: [AuthGuard] },
     { path: 'administration', component: AdministrationComponent, canActivate: [AuthGuard] },

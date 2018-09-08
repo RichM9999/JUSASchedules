@@ -21,6 +21,14 @@
 
     --jusa-highlight: #e8ff0d;
     --jusa-highlight-soft: #f9ffbe;
+
+    --jusa-error: #e54000;
+    --jusa-error-darker: #a02c00;
+    --jusa-error-darkest: #722000;
+
+    --jusa-success: #a5e500;
+    --jusa-success-darker: #84b700;
+    --jusa-success-darkest: #638900;
 }
 
 .btn-primary {

@@ -1,3 +1,25 @@
-<p>
-  open-spots works!
-</p>
+<h5>Open Spots</h5>
+<table class="table gameGrid table-responsive table-bordered">
+  <thead>
+      <tr>
+          <th>Game Date<br /><span *ngIf="!isAdmin()" class="smallType">(click date for all games)</span></th>
+          <th>Openings Left</th>
+          <th *ngIf="isAdmin()" >Openings On Hold</th>
+          <th>To Be assigned</th>
+          <th *ngIf="isAdmin()" >To Be accepted</th>
+          <th>Availble For Sign-up</th>
+      </tr>
+  </thead>
+  <tbody>
+      <ng-container *ngFor="let gamedate of gameDateStatuses; let i = index">
+          <tr [ngClass]="rowColor(i)">
+              <td><button [routerLink]="['/schedules',gamedate.gamedate,0]" class="btn btn-primary btn-block">{{ gamedate.gamedate }}</button></td>
+              <td><button [routerLink]="['/schedules',gamedate.gamedate,-999]" class="btn btn-primary btn-block" [disabled]="gamedate.spots == 0 ? 'disabled' : ''">{{ gamedate.spots }}</button></td>
+              <td *ngIf="isAdmin()" ><button [routerLink]="['/schedules',gamedate.gamedate,21]" class="btn btn-primary btn-block" [disabled]="gamedate.held == 0 ? 'disabled' : ''">{{ gamedate.held }}</button></td>
+              <td><button [routerLink]="['/schedules',gamedate.gamedate,5]" class="btn btn-primary btn-block" [disabled]="gamedate.tobeassigned == 0 ? 'disabled' : ''">{{ gamedate.tobeassigned }}</button></td>
+              <td *ngIf="isAdmin()"><button [routerLink]="['/schedules',gamedate.gamedate,-998]" class="btn btn-primary btn-block" [disabled]="gamedate.tobeaccepted == 0 ? 'disabled' : ''">{{ gamedate.tobeaccepted }}</button></td>
+              <td [ngClass]="'status' + gamedate.signupstatus">{{ gamedate.signup}}</td>
+          </tr>
+      </ng-container>
+  </tbody>
+</table>       
