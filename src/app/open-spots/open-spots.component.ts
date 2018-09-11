@@ -44,4 +44,5 @@ export class OpenSpotsComponent  {
     }
     return this.currentUser.isadmin;
   }
+  
 }

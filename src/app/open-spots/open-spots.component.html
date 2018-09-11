@@ -1,9 +1,9 @@
 <h5>Open Spots</h5>
-<table class="table gameGrid table-responsive table-bordered">
+<table class="table gameGrid table-responsive table-bordered table-openspots">
   <thead>
       <tr>
-          <th>Game Date<br /><span *ngIf="!isAdmin()" class="smallType">(click date for all games)</span></th>
-          <th>Openings Left</th>
+          <th>Game Date<span *ngIf="!isAdmin()" class="smallType"><br />(click date for all games)</span></th>
+          <th>Openings Left<span *ngIf="!isAdmin()" class="smallType"><br />(click to view open spots)</span></th>
           <th *ngIf="isAdmin()" >Openings On Hold</th>
           <th>To Be assigned</th>
           <th *ngIf="isAdmin()" >To Be accepted</th>
@@ -13,7 +13,7 @@
   <tbody>
       <ng-container *ngFor="let gamedate of gameDateStatuses; let i = index">
           <tr [ngClass]="rowColor(i)">
-              <td><button [routerLink]="['/schedules',gamedate.gamedate,0]" class="btn btn-primary btn-block">{{ gamedate.gamedate }}</button></td>
+              <td><button [routerLink]="['/schedules',gamedate.gamedate,0]" class="btn btn-primary btn-block">{{ gamedate.gamedate | date:'EE M/dd/yyyy' }}</button></td>
               <td><button [routerLink]="['/schedules',gamedate.gamedate,-999]" class="btn btn-primary btn-block" [disabled]="gamedate.spots == 0 ? 'disabled' : ''">{{ gamedate.spots }}</button></td>
               <td *ngIf="isAdmin()" ><button [routerLink]="['/schedules',gamedate.gamedate,21]" class="btn btn-primary btn-block" [disabled]="gamedate.held == 0 ? 'disabled' : ''">{{ gamedate.held }}</button></td>
               <td><button [routerLink]="['/schedules',gamedate.gamedate,5]" class="btn btn-primary btn-block" [disabled]="gamedate.tobeassigned == 0 ? 'disabled' : ''">{{ gamedate.tobeassigned }}</button></td>

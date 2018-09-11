@@ -14,6 +14,7 @@
     --jusa-medium-hover: #ffffff;
 
     --jusa-row-odd: #d1edf9;
+    --jusa-row-disabled: #d0d0d0;
     --jusa-row-even: #ffffff;
 
     --jusa-font-bright: #ffffff;
@@ -38,30 +39,51 @@
 .btn-primary:hover {
     background-color: var(--jusa-dark-hover) !important;
 }
+
+.btn-light {
+    background-color: transparent !important;
+    border-top-color: transparent !important;
+    border-right-color: transparent !important;
+    border-bottom-color: transparent !important;
+    border-left-color: transparent !important;
+}
+.btn-light:hover {
+    background-color: var(--jusa-medium) !important;
+}
+
 .main-container {
     width: 100%;
 }
 .main-header {
-    background-image: url(images/bluejersey.jpg);
-    background-repeat: repeat-x;
-    height: 110px;
+    background-image: url(images/bluejerseysmall.jpg);
+    background-repeat: repeat;
+    height: 55px;
     margin: 0px;
     padding: 0px;
     overflow:hidden;
     border-top: 2px solid var(--jusa-medium);
 }
 .main-logo {
+    margin: 0px;
+    padding-left: 5px;
     padding-top: 0px;
-    padding-right: 20px;
+    height: 53px;
+    width: 53px;
+    float:left;
+    background-image: url('images/JUSAbadge.png');
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 .main-title {
     margin: 0px;
-    padding-left: 5px;
+    padding-left: 65px;
     color: var(--jusa-font-bright);
-    font-size: 3.5vw;
+    font-size: 30px;
+    white-space: nowrap;
     font-weight: bold;
     height: 100px;
     text-shadow: 8px 8px 8px var(--jusa-dark);
+    vertical-align: middle;
 }
 
 .fieldpopover {

@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {Observable} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
 import { GameDataService } from '../services/game-data.service'
 import { GameNumberDataService } from '../services/filters/gameNumber-data.service';
@@ -11,8 +14,14 @@ import { GameFieldDataService } from '../services/filters/gameField-data.service
 import { GameTeamDataService } from '../services/filters/gameTeam-data.service';
 import { GameRefereeDataService } from '../services/filters/gameReferee-data.service';
 import { GameSignupService } from "../services/game-signup.service";
+import { GameAssignService } from "../services/game-assign.service";
+import { GameConfirmService } from "../services/game-confirm.service";
+import { GameNoteService } from "../services/game-note.service";
+import { AssignableRefereeDataService } from '../services/filters/assignableReferee-data.service';
+import { GameSetNumberOfRefsService } from '../services/game-setnumberofrefs.service';
 
 import { Game } from '../models/game.model';
+import { GameNote } from '../models/gameNote.model';
 import { GameNumber } from '../models/gameNumber.model';
 import { GameDivision } from '../models/gameDivision.model';
 import { GameType } from '../models/gameType.model';
@@ -23,6 +32,7 @@ import { GameTeam } from '../models/gameTeam.model';
 import { GameReferee } from '../models/gameReferee.model';
 import { User } from '../models/user';
 import { SignupResponse } from '../models/signupResponse';
+import { AssignResponse } from '../models/assignResponse';
 
 import { enableProdMode } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, NgModel } from '@angular/forms';
@@ -62,6 +72,8 @@ export class GameScheduleComponent implements OnInit {
   gameTeam: string = "(any)";
   gameRefereeId: number;
 
+  assignableReferees: GameReferee[] = [];
+
   lastValue: string = "";
   isOdd: boolean = false;
 
@@ -78,6 +90,11 @@ export class GameScheduleComponent implements OnInit {
       , private gameRefereeService: GameRefereeDataService
       , private router: ActivatedRoute
       , private gameSignupService: GameSignupService
+      , private gameAssignService: GameAssignService
+      , private gameConfirmService: GameConfirmService
+      , private assignableRefereeService : AssignableRefereeDataService
+      , private setNumberOfRefsService : GameSetNumberOfRefsService
+      , private noteService: GameNoteService
     )
     {    
       this.gameDate = this.router.snapshot.params.gamedate;
@@ -85,6 +102,10 @@ export class GameScheduleComponent implements OnInit {
     }
 
   ngOnInit() {
+
+  }
+
+  ngAfterViewInit() {
     this.getFilters();
     this.getGames();
   }
@@ -98,6 +119,7 @@ export class GameScheduleComponent implements OnInit {
       this.gameFieldService.getFields().subscribe(g => this.gameFields = g);
       this.gameTeamService.getTeams().subscribe(g => this.gameTeams = g);
       this.gameRefereeService.getReferees().subscribe(g => this.gameReferees = g);
+      this.assignableRefereeService.getReferees().subscribe(g => this.assignableReferees = g);
   }
 
   getGames() {
@@ -262,7 +284,169 @@ export class GameScheduleComponent implements OnInit {
           ${response.statusname} ${response.statusupdatedon}
       </span>`;
     }
-    button.remove();
-   
+    button.remove();  
   }
+
+  // assignableReferees() {
+  //   return this.gameReferees.filter(function(ref) {
+  //     return ref.sysid > 0; 
+  //   });
+  // }
+
+  searchReferee = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 2 ? []
+        : this.assignableReferees
+          .filter(v => v.displayname.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    )    
+  
+  selectReferee(event: any, game: Game, position: string) {
+    switch (position) {
+      case "center":
+        game.crid = event.item.sysid;
+        game.centername = event.item.displayname;
+        game.crstatusname = "(unsaved)";
+        game.crupdatedon = null;
+        break;
+      case "AR1":
+        game.ar1id = event.item.sysid;
+        game.ar1name = event.item.displayname;
+        game.ar1statusname = "(unsaved)";
+        game.ar1updatedon = null;
+        break;
+      case "AR2":
+        game.ar2id = event.item.sysid;
+        game.ar2name = event.item.displayname;
+        game.ar2statusname = "(unsaved)";
+        game.ar2updatedon = null;
+        break;
+    }
+  }
+
+  getCellClass(isSpecial: boolean) {
+    return isSpecial ? "refSpecial" : "";
+  }
+
+  doAssign(event, game: Game) {
+    this.gameAssignService.doAssign(game.sysid, game.crid, game.ar1id, game.ar2id)
+      .subscribe(r => 
+        this.processAssign(r, game)
+      );
+  }
+
+  doClear(event, game: Game) {
+    game.crid = null;
+    game.ar1id = null;
+    game.ar2id = null;
+    this.doAssign(event, game);
+  }
+
+  doClearCenter(event, game: Game) {
+    game.crid = null;
+    this.doAssign(event, game);
+  }
+  doClearAR1(event, game: Game) {
+    game.ar1id = null;
+    this.doAssign(event, game);
+  }
+  doClearAR2(event, game: Game) {
+    game.ar2id = null;
+    this.doAssign(event, game);
+  }
+
+  doHoldAll(event, game: Game) {
+    game.crid = 21;
+    game.ar1id = 21;
+    game.ar2id = 21;
+    this.doAssign(event, game);
+  }
+
+  doHoldCenter(event, game: Game) {
+    game.crid = 21;
+    this.doAssign(event, game);
+  }
+  doHoldAR1(event, game: Game) {
+    game.ar1id = 21;
+    this.doAssign(event, game);
+  }
+  doHoldAR2(event, game: Game) {
+    game.ar2id = 21;
+    this.doAssign(event, game);
+  }
+
+  doToBeAssignedAll(event, game: Game) {
+    game.crid = 5;
+    game.ar1id = 5;
+    game.ar2id = 5;
+    this.doAssign(event, game);
+  }
+
+  doConfirmCenter(event, game: Game) {
+    this.gameConfirmService.doConfirm(game.sysid, "center")
+      .subscribe(r => 
+        this.processAssign(r, game)
+      );
+  }
+  doConfirmAR1(event, game: Game) {
+    this.gameConfirmService.doConfirm(game.sysid, "AR1")
+      .subscribe(r => 
+        this.processAssign(r, game)
+      );
+  }
+  doConfirmAR2(event, game: Game) {
+    this.gameConfirmService.doConfirm(game.sysid, "AR2")
+      .subscribe(r => 
+        this.processAssign(r, game)
+      );
+  }
+
+  setNumberOfRefs(event, game: Game, numberofrefs: number) {
+    this.setNumberOfRefsService.setNumberOfRefs(game.sysid, numberofrefs)
+      .subscribe(r => 
+        this.processNumberOfRefsChange(r, game, numberofrefs)
+      );
+  }
+
+  processNumberOfRefsChange(assignResponse: AssignResponse, game: Game, numberofRefs: number) {
+    this.processAssign(assignResponse, game);
+    game.numberofrefs = numberofRefs;
+  }
+
+  processAssign(assignResponse: AssignResponse, game: Game) {
+    game.centername = assignResponse.centername;
+    game.centerspecial = assignResponse.centerspecial
+    game.crstatusname = assignResponse.crstatusname;
+    game.crupdatedon = assignResponse.crstatusupdatedon;
+
+    game.ar1name = assignResponse.ar1name;
+    game.ar1special = assignResponse.ar1special;
+    game.ar1updatedon = assignResponse.ar1statusupdatedon;
+    game.ar1statusname = assignResponse.ar1statusname;
+
+    game.ar2name = assignResponse.ar2name;
+    game.ar2special = assignResponse.ar2special;
+    game.ar2statusname = assignResponse.ar2statusname
+    game.ar2updatedon = assignResponse.ar2statusupdatedon;
+
+  }
+
+  removeNote(noteid: number, game: Game) {
+    this.noteService.deleteNote(noteid)
+    .subscribe(r => 
+      this.hideNote(noteid, game)
+    );
+  }
+
+  hideNote(noteid: number, game: Game) {
+    for (var i=0; i< game.gamenotes.length; i++) {
+      if (game.gamenotes[i].sysid = noteid) {
+        game.gamenotes.splice(i, 1);
+        break;
+      }
+    }
+  }
+  refereeFormatter = (ref: {displayname: string}) => ref.displayname || ref;
+  
 }

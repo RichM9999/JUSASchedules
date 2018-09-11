@@ -4,3 +4,12 @@
 .gameGrid td {
     height: auto !important;
 }
+.table-bordered {
+    border: 0px !important;
+    font-size:0.9rem;
+}
+.table-bordered tr {
+    border-left: 1px solid var(--jusa-medium) !important;
+    border-right: 1px solid var(--jusa-medium) !important;
+
+}

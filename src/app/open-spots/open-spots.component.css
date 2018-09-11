@@ -24,10 +24,11 @@
 }
 .smallType {
     font-size:0.65rem;
+    white-space: nowrap;
 }
 .table-bordered {
     border: 0px !important;
-    font-size:1rem;
+    font-size:0.9rem;
 }
 .table-bordered tr {
     border-left: 1px solid var(--jusa-medium) !important;
@@ -37,20 +38,25 @@
 .statusnow {
     background-color: var(--jusa-success-darker);
     font-weight:bold;
+    white-space: nowrap;
 }
 .statusfull {
     background-color: #b3b3b3;
     font-weight:bold;
+    white-space: nowrap;
 }
 .statusfuture {
     background-color: var(--jusa-error);
     font-weight:bold;
+    white-space: nowrap;
 }
 .statuslevel {
     background-color:  var(--jusa-error-darker);
     font-weight:bold;
+    white-space: nowrap;
 }
 .statusdisabled {
     background-color:  var(--jusa-error-darkest);
     font-weight:bold;
+    white-space: nowrap;
 }

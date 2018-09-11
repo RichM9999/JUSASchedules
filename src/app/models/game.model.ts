@@ -1,4 +1,4 @@
-import { Moment } from 'moment';
+import { GameNote } from './gameNote.model';
 
 export interface Game {
   sysid: number;
@@ -57,12 +57,7 @@ export interface Game {
   numberofrefs: number;
   stampupdatedon: string;
   nonjusafield: boolean;
-  gamenotes: [{
-    postedbyid: number;
-    postedby: string;
-    message: string;
-    postedon: string;
-  }];
+  gamenotes: [GameNote];
   divisionchanged: boolean;
   gamedatechanged: boolean;
   gametimechanged: boolean;

@@ -1,6 +1,10 @@
 .navbar-nav-jusa {
     background-color: var(--jusa-dark) !important;
     border-top: 2px solid var(--jusa-medium);
+    padding-top: 0.1rem !important;
+    padding-bottom: 0.1rem !important;
+    line-height: 0.70;
+    font-size: 0.8rem;
 }
 
 .nav-link {
