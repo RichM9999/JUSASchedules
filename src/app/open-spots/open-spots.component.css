@@ -60,3 +60,28 @@
     font-weight:bold;
     white-space: nowrap;
 }
+
+.statusnowadmin {
+    background-color: var(--jusa-success-darker);
+    font-weight:bold;
+}
+.statusfulladmin {
+    background-color: #b3b3b3;
+    font-weight:bold;
+}
+.statusfutureadmin {
+    background-color: var(--jusa-error);
+    font-weight:bold;
+}
+.statusleveladmin {
+    background-color:  var(--jusa-error-darker);
+    font-weight:bold;
+}
+.statusdisabledadmin {
+    background-color:  var(--jusa-error-darkest);
+    font-weight:bold;
+}
+.statusadmin {
+    white-space: normal !important;
+    font-size: 0.9em;
+}

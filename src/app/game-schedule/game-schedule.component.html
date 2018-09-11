@@ -1,22 +1,22 @@
 <table class="table table-bordered gameGrid table-responsive gameTable">
     <thead>
         <tr>
-            <th class="sortHeader" style="width: 98px;" (click)="toggleOrderBy('gamenumber')">Game # <i class="fas" [class]="orderByIcon('gamenumber')"></i></th>
-            <th class="sortHeader" style="width: 99px;" (click)="toggleOrderBy('division')">Division <i class="fas" [class]="orderByIcon('division')"></i></th>
-            <th class="sortHeader" style="width: 88px;" (click)="toggleOrderBy('type')">Type <i class="fas" [class]="orderByIcon('type')"></i></th>
-            <th class="sortHeader" style="width: 135px;" (click)="toggleOrderBy('date')">Date <i class="fas" [class]="orderByIcon('date')"></i></th>
-            <th class="sortHeader" style="width: 108px;" (click)="toggleOrderBy('time')">Time <i class="fas" [class]="orderByIcon('time')"></i></th>
-            <th class="sortHeader" style="width: 230px;" (click)="toggleOrderBy('field')">Field <i class="fas" [class]="orderByIcon('field')"></i></th>
-            <th style="width: 220px;">Home</th>
-            <th style="width: 220px;">Away</th>
-            <th *ngIf="isAdmin()"></th>
-            <th style="width: 240px;" colspan="2">Center</th>
-            <th style="width: 240px;" colspan="2">AR1</th>
-            <th style="width: 240px;" colspan="2">AR2
-                    <div class="refreshbutton">
-                        <i (click)="getGames()" class="fas fa-sync-alt"></i>
-                    </div>
-                </th>
+            <th class="sortHeader" style="min-width: 90px;" (click)="toggleOrderBy('gamenumber')">Game # <i class="fas" [class]="orderByIcon('gamenumber')"></i></th>
+            <th class="sortHeader" style="min-width: 90px;" (click)="toggleOrderBy('division')">Division <i class="fas" [class]="orderByIcon('division')"></i></th>
+            <th class="sortHeader" style="min-width: 90px;" (click)="toggleOrderBy('type')">Type <i class="fas" [class]="orderByIcon('type')"></i></th>
+            <th class="sortHeader" style="min-width: 128px;" (click)="toggleOrderBy('date')">Date <i class="fas" [class]="orderByIcon('date')"></i></th>
+            <th class="sortHeader" style="min-width: 93px;" (click)="toggleOrderBy('time')">Time <i class="fas" [class]="orderByIcon('time')"></i></th>
+            <th class="sortHeader" style="min-width: 120px;" (click)="toggleOrderBy('field')">Field <i class="fas" [class]="orderByIcon('field')"></i></th>
+            <th style="min-width: 120px;">Home</th>
+            <th style="min-width: 120px;">Away</th>
+            <th *ngIf="isAdmin()" style="width:32px;"></th>
+            <th style="min-width: 220px;" colspan="2">Center</th>
+            <th style="min-width: 220px;" colspan="2">AR1</th>
+            <th style="min-width: 222px;" colspan="2">AR2
+                <div class="refreshbutton">
+                    <i (click)="getGames()" class="fas fa-sync-alt"></i>
+                </div>
+            </th>
         </tr>
         <tr class="filterRow">
             <th>
@@ -41,9 +41,8 @@
                 <ng-select [items]="gameTeams" dropdownPosition="down" bindLabel="team" bindValue="team" [(ngModel)]="gameTeam" class="custom" (change)="getGames()"></ng-select>                
             </th>
             <th *ngIf="isAdmin()"></th>
-            <th colspan="5">
+            <th colspan="6">
                 <ng-select [items]="gameReferees" dropdownPosition="down" bindLabel="displayname" bindValue="sysid" [(ngModel)]="gameRefereeId" class="wide" (change)="getGames()"></ng-select>
-                
             </th>
         </tr>
     </thead>
@@ -79,9 +78,9 @@
                 </td>
                 <td [rowSpan]="game.gamenotes.length + 1">{{ game.home }}</td>
                 <td [rowSpan]="game.gamenotes.length + 1">{{ game.away }}</td>
-                <td *ngIf="isAdmin()" [rowSpan]="game.gamenotes.length + 1">
+                <td *ngIf="isAdmin()" class="lesspadding" [rowSpan]="game.gamenotes.length + 1">
                     <button *ngIf="isAdmin()" type="button" class="btn btn-primary btn-sm btn-block" (click)="doAssign($event,game)"><i class="fas fa-save"></i></button>
-                    <div class="dropdown">
+                    <div class="dropdown dropright">
                         <button class="btn btn-primary btn-sm btn-block dropdown-toggle" type="button" id="adminDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         </button>
                         <div class="dropdown-menu" aria-labelledby="adminDropDown">
@@ -93,11 +92,10 @@
                             <a *ngIf="game.numberofrefs != 3" class="dropdown-item admin-menu" (click)="setNumberOfRefs($event,game, 3)"><i class="fas fa-dice-three"></i> Change to 3-ref</a>
                         </div>
                     </div>                    
-                    
                 </td>
                 <td *ngIf="game.numberofrefs != 2" [colSpan]="6 / game.numberofrefs" [ngClass]="getCellClass(game.centerspecial)">
                     <span *ngIf="isAdmin()">
-                        <input class="assignlist" [inputFormatter]="refereeFormatter" (selectItem)="selectReferee($event, game, 'center')" [(ngModel)]="game.centername" id="center-assign{{game.sysid}}" type="text" (focus)="$event.target.select()" [ngbTypeahead]="searchReferee" [resultTemplate]="refereeTemplate" />
+                        <input class="assignlist" placeholder="(type name to assign)" [inputFormatter]="refereeFormatter" (selectItem)="selectReferee($event, game, 'center')" [(ngModel)]="game.centername" id="center-assign{{game.sysid}}" type="text" (focus)="$event.target.select()" [ngbTypeahead]="searchReferee" [resultTemplate]="refereeTemplate" />
                         <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="centerDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="-1"></button>
                         <div class="dropdown-menu" aria-labelledby="centerDropDown">
                             <a class="dropdown-item admin-menu" (click)="doClearCenter($event,game)"><i class="fas fa-times-circle"></i> Remove</a>
@@ -126,7 +124,7 @@
                 </td>
                 <td *ngIf="game.numberofrefs >= 2" [colSpan]="6 / game.numberofrefs" [ngClass]="getCellClass(game.ar1special)">
                     <span *ngIf="isAdmin()">
-                            <input class="assignlist" [inputFormatter]="refereeFormatter" (selectItem)="selectReferee($event, game, 'AR1')" [(ngModel)]="game.ar1name" id="ar1-assign{{game.sysid}}" type="text" (focus)="$event.target.select()" [ngbTypeahead]="searchReferee" [resultTemplate]="refereeTemplate" />
+                            <input class="assignlist" placeholder="(type name to assign)" [inputFormatter]="refereeFormatter" (selectItem)="selectReferee($event, game, 'AR1')" [(ngModel)]="game.ar1name" id="ar1-assign{{game.sysid}}" type="text" (focus)="$event.target.select()" [ngbTypeahead]="searchReferee" [resultTemplate]="refereeTemplate" />
                             <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="ar1DropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="-1"></button>
                             <div class="dropdown-menu" aria-labelledby="ar1DropDown">
                                 <a class="dropdown-item admin-menu" (click)="doClearAR1($event,game)"><i class="fas fa-times-circle"></i> Remove</a>
@@ -158,14 +156,14 @@
                 </td>
                 <td *ngIf="game.numberofrefs >= 2" [colSpan]="6 / game.numberofrefs" [ngClass]="getCellClass(game.ar2special)">
                     <span *ngIf="isAdmin()">
-                        <input class="assignlist" [inputFormatter]="refereeFormatter" (selectItem)="selectReferee($event, game, 'AR2')" [(ngModel)]="game.ar2name" id="ar2-assign{{game.sysid}}" type="text" (focus)="$event.target.select()" [ngbTypeahead]="searchReferee" [resultTemplate]="refereeTemplate" />
+                        <input class="assignlist" placeholder="(type name to assign)" [inputFormatter]="refereeFormatter" (selectItem)="selectReferee($event, game, 'AR2')" [(ngModel)]="game.ar2name" id="ar2-assign{{game.sysid}}" type="text" (focus)="$event.target.select()" [ngbTypeahead]="searchReferee" [resultTemplate]="refereeTemplate" />
                         <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="ar2DropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="-1"></button>
                         <div class="dropdown-menu" aria-labelledby="ar2DropDown">
                             <a class="dropdown-item admin-menu" (click)="doClearAR2($event,game)"><i class="fas fa-times-circle"></i> Remove</a>
                             <a class="dropdown-item admin-menu" (click)="doHoldAR2($event,game)"><i class="fas fa-pause"></i> Hold</a>
                             <a class="dropdown-item admin-menu" *ngIf="game.ar2status == 'A'" (click)="doConfirmAR2($event,game)"><i class="fas fa-check"></i> Mark as Confirmed</a>
                         </div>
-                </span>  
+                    </span>  
                     <span *ngIf="game.ar2id != null && game.ar2id != 0">
                         <span *ngIf="!isAdmin()">
                             {{ game.ar2name }}<BR />

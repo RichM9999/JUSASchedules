@@ -82,6 +82,7 @@
     border-radius: 7px;
     width:82%;
     padding-top:0px;
+    font-size:0.9em;
 }
 
 .refSpecial {
@@ -96,4 +97,21 @@
 }
 .hand {
     cursor:pointer;
+}
+.lesspadding {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #d0d0d0;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #d0d0d0;;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #d0d0d0;;
 }

@@ -18,7 +18,7 @@
               <td *ngIf="isAdmin()" ><button [routerLink]="['/schedules',gamedate.gamedate,21]" class="btn btn-primary btn-block" [disabled]="gamedate.held == 0 ? 'disabled' : ''">{{ gamedate.held }}</button></td>
               <td><button [routerLink]="['/schedules',gamedate.gamedate,5]" class="btn btn-primary btn-block" [disabled]="gamedate.tobeassigned == 0 ? 'disabled' : ''">{{ gamedate.tobeassigned }}</button></td>
               <td *ngIf="isAdmin()"><button [routerLink]="['/schedules',gamedate.gamedate,-998]" class="btn btn-primary btn-block" [disabled]="gamedate.tobeaccepted == 0 ? 'disabled' : ''">{{ gamedate.tobeaccepted }}</button></td>
-              <td [ngClass]="'status' + gamedate.signupstatus">{{ gamedate.signup}}</td>
+              <td [ngClass]="'status' + gamedate.signupstatus + (isAdmin() ? ' statusadmin' : '')">{{ gamedate.signup}}</td>
           </tr>
       </ng-container>
   </tbody>
