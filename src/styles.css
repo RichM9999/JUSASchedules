@@ -111,10 +111,10 @@
     background-color: var(--jusa-row-even);
 }
 
-.gameGrid {
+.gameGrid, .gameGridAdmin {
     width: 100%;
 }
-.gameGrid th {
+.gameGrid th, .gameGridAdmin th {
     text-align: center;
     vertical-align: top;
     font-weight: bold;
@@ -124,7 +124,16 @@
 }
 
 .gameGrid td {
-    height: 60px;
+    height: 75px;
+    min-height: 75px;
+    text-align: center;
+    vertical-align: middle;
+    border-color: var(--palette-basis)  !important;
+}
+
+.gameGridAdmin td {
+    height: 85px;
+    min-height: 85px;
     text-align: center;
     vertical-align: middle;
     border-color: var(--palette-basis)  !important;

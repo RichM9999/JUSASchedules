@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {Observable} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
@@ -71,6 +71,8 @@ export class GameScheduleComponent implements OnInit {
   gameField: string = "(any)";
   gameTeam: string = "(any)";
   gameRefereeId: number;
+  applyRefereeId: number = 0;
+  gameNote: string = "";
 
   assignableReferees: GameReferee[] = [];
 
@@ -95,6 +97,7 @@ export class GameScheduleComponent implements OnInit {
       , private assignableRefereeService : AssignableRefereeDataService
       , private setNumberOfRefsService : GameSetNumberOfRefsService
       , private noteService: GameNoteService
+      , private renderer: Renderer2
     )
     {    
       this.gameDate = this.router.snapshot.params.gamedate;
@@ -336,6 +339,62 @@ export class GameScheduleComponent implements OnInit {
       );
   }
 
+  doClearMultiple(event, games: Game[]) {
+    games.forEach(game => {
+      game.crid = null;
+      game.ar1id = null;
+      game.ar2id = null;
+      this.doAssign(event, game);       
+    });
+  }
+
+  doHoldAllMultiple(event, games: Game[]) {
+    games.forEach(game => {
+      game.crid = 21;
+      game.ar1id = 21;
+      game.ar2id = 21;
+      this.doAssign(event, game);       
+    });
+  }
+
+  doToBeAssignedAllMultiple(event, games: Game[]) {
+    games.forEach(game => {
+      game.crid = 5;
+      game.ar1id = 5;
+      game.ar2id = 5;
+      this.doAssign(event, game);       
+    });
+  }
+
+  doFillAll(event, games: Game[], refereeId: number) {
+    if (refereeId <= 0)
+      return;
+
+    games.forEach(game => {
+      game.crid = refereeId;
+      game.ar1id = refereeId;
+      game.ar2id = refereeId;
+      this.doAssign(event, game);       
+    });
+    this.applyRefereeId = 0;
+  }
+
+  doFillOpen(event, games: Game[], refereeId: number) {
+    if (refereeId <= 0)
+      return;
+
+      games.forEach(game => {
+      if (game.crid == null)
+        game.crid = refereeId;
+      if (game.ar1id == null)        
+        game.ar1id = refereeId;
+      if (game.ar2id == null)
+        game.ar2id = refereeId;
+      this.doAssign(event, game);       
+    });
+    this.applyRefereeId = 0;
+  }
+
   doClear(event, game: Game) {
     game.crid = null;
     game.ar1id = null;
@@ -432,6 +491,26 @@ export class GameScheduleComponent implements OnInit {
 
   }
 
+  showNoteEditor(gameid: number) {
+    var editorRow = document.getElementById("gameNote" + gameid.toString());
+    this.renderer.setStyle(editorRow, "visibility", "visible");  
+  }
+
+  addNote(event, game: Game, note: string) {
+    var row = event.target.closest("tr");
+
+    this.noteService.addNote(game.sysid, note)
+    .subscribe(notes => 
+      this.updateNotes(game, notes)
+    );
+    row.style="visibility:collapse";
+    this.gameNote = "";
+  }
+
+  updateNotes(game: Game, notes: GameNote[]) {
+    game.gamenotes = notes;
+  }
+
   removeNote(noteid: number, game: Game) {
     this.noteService.deleteNote(noteid)
     .subscribe(r => 
@@ -441,7 +520,7 @@ export class GameScheduleComponent implements OnInit {
 
   hideNote(noteid: number, game: Game) {
     for (var i=0; i< game.gamenotes.length; i++) {
-      if (game.gamenotes[i].sysid = noteid) {
+      if (game.gamenotes[i].sysid == noteid) {
         game.gamenotes.splice(i, 1);
         break;
       }

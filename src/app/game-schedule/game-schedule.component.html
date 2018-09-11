@@ -1,4 +1,4 @@
-<table class="table table-bordered gameGrid table-responsive gameTable">
+<table [ngClass]="'table table-bordered gameGrid' + (isAdmin() ? 'Admin' : '') + ' table-responsive gameTable'">
     <thead>
         <tr>
             <th class="sortHeader" style="min-width: 90px;" (click)="toggleOrderBy('gamenumber')">Game # <i class="fas" [class]="orderByIcon('gamenumber')"></i></th>
@@ -35,12 +35,14 @@
                 <ng-select [items]="gameTimes" dropdownPosition="down" [searchable]="false" bindLabel="gametime" bindValue="gametime" [(ngModel)]="gameTime" class="custom" (change)="getGames()"></ng-select>
             </th>
             <th>
-                <ng-select [items]="gameFields" dropdownPosition="down" [searchable]="false" bindLabel="field" bindValue="field" [(ngModel)]="gameField" class="custom" (change)="getGames()"></ng-select>                
+                <ng-select [items]="gameFields" dropdownPosition="down" [searchable]="false" bindLabel="field" bindValue="field" [(ngModel)]="gameField" class="custom" (change)="getGames()"></ng-select>
             </th>
             <th colspan="2">
-                <ng-select [items]="gameTeams" dropdownPosition="down" bindLabel="team" bindValue="team" [(ngModel)]="gameTeam" class="custom" (change)="getGames()"></ng-select>                
+                <ng-select [items]="gameTeams" dropdownPosition="down" bindLabel="team" bindValue="team" [(ngModel)]="gameTeam" class="custom" (change)="getGames()"></ng-select>
             </th>
-            <th *ngIf="isAdmin()"></th>
+            <th *ngIf="isAdmin()" class="lesspadding">
+                <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#adminModal"><i class="fas fa-caret-right"></i></button>
+            </th>
             <th colspan="6">
                 <ng-select [items]="gameReferees" dropdownPosition="down" bindLabel="displayname" bindValue="sysid" [(ngModel)]="gameRefereeId" class="wide" (change)="getGames()"></ng-select>
             </th>
@@ -62,13 +64,13 @@
                 <td [rowSpan]="game.gamenotes.length + 1">
                     <span [ngClass]="getCellClassChanged(game.gametimechanged)">{{ game.gametime }}</span>
                 </td>
-                <td *ngIf="game.fieldmapurl != null" 
+                <td *ngIf="game.fieldmapurl != null"
                         [rowSpan]="game.gamenotes.length + 1"
-                        style="cursor:help" 
+                        style="cursor:help"
                         [ngbPopover]="fieldInfo"
                         popoverClass="fieldpopover"
                         triggers="manual" #fieldpop="ngbPopover" (click)="toggleWithGame(fieldpop, game)"
-                        popoverTitle="{{ game.field }}" 
+                        popoverTitle="{{ game.field }}"
                         container="body"
                         placement="bottom">
                     <span [ngClass]="getCellClassChanged(game.fieldchanged)">{{ game.field }}</span>
@@ -87,11 +89,14 @@
                             <a class="dropdown-item admin-menu" (click)="doClear($event,game)"><i class="fas fa-times-circle"></i> Clear all positions</a>
                             <a class="dropdown-item admin-menu" (click)="doHoldAll($event,game)"><i class="fas fa-pause"></i> Hold all positions</a>
                             <a class="dropdown-item admin-menu" (click)="doToBeAssignedAll($event,game)"><i class="fas fa-bookmark"></i> Set all To be assigned</a>
+                            <div class="dropdown-divider"></div>
                             <a *ngIf="game.numberofrefs != 1" class="dropdown-item admin-menu" (click)="setNumberOfRefs($event,game, 1)"><i class="fas fa-dice-one"></i> Change to 1-ref</a>
                             <a *ngIf="game.numberofrefs != 2" class="dropdown-item admin-menu" (click)="setNumberOfRefs($event,game, 2)"><i class="fas fa-dice-two"></i> Change to 2-ref</a>
                             <a *ngIf="game.numberofrefs != 3" class="dropdown-item admin-menu" (click)="setNumberOfRefs($event,game, 3)"><i class="fas fa-dice-three"></i> Change to 3-ref</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item admin-menu" (click)="showNoteEditor(game.sysid)"><i class="fas fa-sticky-note"></i> Add Game Note</a>
                         </div>
-                    </div>                    
+                    </div>
                 </td>
                 <td *ngIf="game.numberofrefs != 2" [colSpan]="6 / game.numberofrefs" [ngClass]="getCellClass(game.centerspecial)">
                     <span *ngIf="isAdmin()">
@@ -117,10 +122,10 @@
                     </span>
                     <span *ngIf="game.crid == null && game.cancenter.length == 0">
                         <button *ngIf="!isAdmin()" class="btn btn-primary" (click)="doSignup($event,game.sysid, 'center')" tabindex="-1"><img src="images/whistle-icon.png" alt="">Select</button>
-                    </span>   
+                    </span>
                     <span *ngIf="game.crid == null && game.cancenter.length != 0 && !isAdmin()">
                         <i class="fas fa-ban gameDenied" ngbTooltip="{{ game.cancenter }}"></i>
-                    </span>   
+                    </span>
                 </td>
                 <td *ngIf="game.numberofrefs >= 2" [colSpan]="6 / game.numberofrefs" [ngClass]="getCellClass(game.ar1special)">
                     <span *ngIf="isAdmin()">
@@ -132,7 +137,7 @@
                                 <a class="dropdown-item admin-menu" *ngIf="game.ar1status == 'A'" (click)="doConfirmAR1($event,game)"><i class="fas fa-check"></i> Mark as Confirmed</a>
                             </div>
                             <br />
-                        </span>  
+                        </span>
                     <span *ngIf="game.ar1id != null && game.ar1id != 0">
                         <span *ngIf="!isAdmin()">
                             {{ game.ar1name }}<BR />
@@ -163,7 +168,7 @@
                             <a class="dropdown-item admin-menu" (click)="doHoldAR2($event,game)"><i class="fas fa-pause"></i> Hold</a>
                             <a class="dropdown-item admin-menu" *ngIf="game.ar2status == 'A'" (click)="doConfirmAR2($event,game)"><i class="fas fa-check"></i> Mark as Confirmed</a>
                         </div>
-                    </span>  
+                    </span>
                     <span *ngIf="game.ar2id != null && game.ar2id != 0">
                         <span *ngIf="!isAdmin()">
                             {{ game.ar2name }}<BR />
@@ -194,6 +199,13 @@
                     </td>
                 </tr>
             </ng-container>
+            <tr *ngIf="isAdmin()" [id]="'gameNote' + game.sysid" style="visibility:collapse">
+                <td colspan="9"></td>
+                <td colspan="6" style="text-align:left;background-color:var(--jusa-highlight);padding-top:2px;padding-bottom:2px;height:30px">
+                    <textarea class="form-control" [(ngModel)]="gameNote"></textarea>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="addNote($event,game,gameNote)">Save</button>
+                </td>
+            </tr>
         </ng-container>
     </tbody>
 </table>
@@ -222,3 +234,23 @@
 <ng-template #refereeTemplate let-r="result" let-t="term">
     <ngb-highlight [result]="r.displayname" [term]="t"></ngb-highlight>
 </ng-template>
+
+<div class="modal" tabindex="-1" role="dialog" id="adminModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <a class="dropdown-item admin-menu" (click)="doClearMultiple($event,games)" data-dismiss="modal"><i class="fas fa-times-circle"></i> Clear all positions</a>
+                <a class="dropdown-item admin-menu" (click)="doHoldAllMultiple($event,games)" data-dismiss="modal"><i class="fas fa-pause"></i> Hold all positions</a>
+                <a class="dropdown-item admin-menu" (click)="doToBeAssignedAllMultiple($event,games)" data-dismiss="modal"><i class="fas fa-bookmark"></i> Set all To be assigned</a>
+                <div class="dropdown-divider"></div>
+                <div style="text-align:center;font-weight:bold;padding-bottom:5px;">Global Assignment</div>
+                <ng-select [items]="gameReferees" dropdownPosition="down" bindLabel="displayname" bindValue="sysid" [(ngModel)]="applyRefereeId"></ng-select>
+                <a class="dropdown-item admin-menu" (click)="doFillAll($event,games,applyRefereeId)" data-dismiss="modal"><i class="fas fa-angle-double-down"></i> Fill All with selected referee</a>
+                <a class="dropdown-item admin-menu" (click)="doFillOpen($event,games,applyRefereeId)" data-dismiss="modal"><i class="fas fa-check-double"></i> Fill Open with selected referee</a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

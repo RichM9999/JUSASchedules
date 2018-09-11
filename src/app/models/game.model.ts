@@ -57,7 +57,7 @@ export interface Game {
   numberofrefs: number;
   stampupdatedon: string;
   nonjusafield: boolean;
-  gamenotes: [GameNote];
+  gamenotes: GameNote[];
   divisionchanged: boolean;
   gamedatechanged: boolean;
   gametimechanged: boolean;
