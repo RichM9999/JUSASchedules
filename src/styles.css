@@ -13,6 +13,8 @@
     --jusa-medium-link: #ffffff;
     --jusa-medium-hover: #ffffff;
 
+    --jusa-light: #4cc0ec;
+
     --jusa-row-odd: #d1edf9;
     --jusa-row-disabled: #d0d0d0;
     --jusa-row-even: #ffffff;
@@ -38,6 +40,14 @@
 
 .btn-primary:hover {
     background-color: var(--jusa-dark-hover) !important;
+}
+
+.btn-secondary {
+    background-color: var(--jusa-light) !important;
+}
+
+.btn-secondary:hover {
+    background-color: var(--jusa-medium) !important;
 }
 
 .btn-light {

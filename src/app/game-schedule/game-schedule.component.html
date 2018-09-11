@@ -79,9 +79,9 @@
                 <td [rowSpan]="game.gamenotes.length + 1">{{ game.home }}</td>
                 <td [rowSpan]="game.gamenotes.length + 1">{{ game.away }}</td>
                 <td *ngIf="isAdmin()" class="lesspadding" [rowSpan]="game.gamenotes.length + 1">
-                    <button *ngIf="isAdmin()" type="button" class="btn btn-primary btn-sm btn-block" (click)="doAssign($event,game)"><i class="fas fa-save"></i></button>
+                    <button *ngIf="isAdmin()" type="button" class="btn btn-secondary btn-sm btn-block" (click)="doAssign($event,game)"><i class="fas fa-save"></i></button>
                     <div class="dropdown dropright">
-                        <button class="btn btn-primary btn-sm btn-block dropdown-toggle" type="button" id="adminDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-secondary btn-sm btn-block dropdown-toggle" type="button" id="adminDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         </button>
                         <div class="dropdown-menu" aria-labelledby="adminDropDown">
                             <a class="dropdown-item admin-menu" (click)="doClear($event,game)"><i class="fas fa-times-circle"></i> Clear all positions</a>
