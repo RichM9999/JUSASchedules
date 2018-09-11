@@ -115,3 +115,6 @@
 ::-ms-input-placeholder { /* Microsoft Edge */
     color: #d0d0d0;;
 }
+.table-responsive {
+    overflow-y: hidden !important;
+}
