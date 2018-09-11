@@ -22,7 +22,7 @@
       </li>
 
       <li class="nav-item">
-          <a class="nav-link" *ngIf="isAuthenticated()" (click)="navbarClose()" [routerLink]="['schedules','(next Saturday)', 0]">Schedules</a>
+          <a class="nav-link" *ngIf="isAuthenticated()" (click)="navbarClose()" routerLink="schedules">Schedules</a>
       </li>
 
       <li class="nav-item">

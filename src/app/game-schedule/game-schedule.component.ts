@@ -1,8 +1,8 @@
-import * as moment from 'moment';
+import { Location } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {Observable} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 import { GameDataService } from '../services/game-data.service'
 import { GameNumberDataService } from '../services/filters/gameNumber-data.service';
@@ -98,10 +98,17 @@ export class GameScheduleComponent implements OnInit {
       , private setNumberOfRefsService : GameSetNumberOfRefsService
       , private noteService: GameNoteService
       , private renderer: Renderer2
+      , private location: Location
     )
-    {    
-      this.gameDate = this.router.snapshot.params.gamedate;
-      this.gameRefereeId = +this.router.snapshot.params.refereeid;
+    {   
+      this.gameDate = "(next Saturday)"; 
+      this.gameRefereeId = 0;
+
+      this.router.queryParams.subscribe(params => {
+        this.gameDate = params['gamedate'] || "(next Saturday)";
+        this.gameRefereeId = +params['referee'] || 0;
+        location.replaceState(window.location.href.split('#')[1].split('?')[0]);
+      });
     }
 
   ngOnInit() {
@@ -114,15 +121,15 @@ export class GameScheduleComponent implements OnInit {
   }
 
   getFilters() {
-      this.gameNumberService.getNumbers().subscribe(g => this.gameNumbers = g);
-      this.gameDivisionService.getDivisions().subscribe(g => this.gameDivisions = g);
-      this.gameTypeService.getTypes().subscribe(g => this.gameTypes = g);
-      this.gameDateService.getDates().subscribe(g => this.gameDates = g);
-      this.gameTimeService.getTimes().subscribe(g => this.gameTimes = g);
-      this.gameFieldService.getFields().subscribe(g => this.gameFields = g);
-      this.gameTeamService.getTeams().subscribe(g => this.gameTeams = g);
-      this.gameRefereeService.getReferees().subscribe(g => this.gameReferees = g);
-      this.assignableRefereeService.getReferees().subscribe(g => this.assignableReferees = g);
+    this.gameNumberService.getNumbers().subscribe(g => this.gameNumbers = g);
+    this.gameDivisionService.getDivisions().subscribe(g => this.gameDivisions = g);
+    this.gameTypeService.getTypes().subscribe(g => this.gameTypes = g);
+    this.gameDateService.getDates().subscribe(g => this.gameDates = g);
+    this.gameTimeService.getTimes().subscribe(g => this.gameTimes = g);
+    this.gameFieldService.getFields().subscribe(g => this.gameFields = g);
+    this.gameTeamService.getTeams().subscribe(g => this.gameTeams = g);
+    this.gameRefereeService.getReferees().subscribe(g => this.gameReferees = g);
+    this.assignableRefereeService.getReferees().subscribe(g => this.assignableReferees = g);
   }
 
   getGames() {

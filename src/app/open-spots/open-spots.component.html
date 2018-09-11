@@ -13,11 +13,11 @@
   <tbody>
       <ng-container *ngFor="let gamedate of gameDateStatuses; let i = index">
           <tr [ngClass]="rowColor(i)">
-              <td><button [routerLink]="['/schedules',gamedate.gamedate,0]" class="btn btn-primary btn-block">{{ gamedate.gamedate | date:'EE M/dd/yyyy' }}</button></td>
-              <td><button [routerLink]="['/schedules',gamedate.gamedate,-999]" class="btn btn-primary btn-block" [disabled]="gamedate.spots == 0 ? 'disabled' : ''">{{ gamedate.spots }}</button></td>
-              <td *ngIf="isAdmin()" ><button [routerLink]="['/schedules',gamedate.gamedate,21]" class="btn btn-primary btn-block" [disabled]="gamedate.held == 0 ? 'disabled' : ''">{{ gamedate.held }}</button></td>
-              <td><button [routerLink]="['/schedules',gamedate.gamedate,5]" class="btn btn-primary btn-block" [disabled]="gamedate.tobeassigned == 0 ? 'disabled' : ''">{{ gamedate.tobeassigned }}</button></td>
-              <td *ngIf="isAdmin()"><button [routerLink]="['/schedules',gamedate.gamedate,-998]" class="btn btn-primary btn-block" [disabled]="gamedate.tobeaccepted == 0 ? 'disabled' : ''">{{ gamedate.tobeaccepted }}</button></td>
+              <td><button [routerLink]="'/schedules'" [queryParams]="{gamedate:gamedate.gamedate, referee:0}" class="btn btn-primary btn-block">{{ gamedate.gamedate | date:'EE M/dd/yyyy' }}</button></td>
+              <td><button [routerLink]="'/schedules'" [queryParams]="{gamedate:gamedate.gamedate, referee:-999}" class="btn btn-primary btn-block" [disabled]="gamedate.spots == 0 ? 'disabled' : ''">{{ gamedate.spots }}</button></td>
+              <td *ngIf="isAdmin()" ><button [routerLink]="'/schedules'" [queryParams]="{gamedate:gamedate.gamedate, referee:21}" class="btn btn-primary btn-block" [disabled]="gamedate.held == 0 ? 'disabled' : ''">{{ gamedate.held }}</button></td>
+              <td><button [routerLink]="'/schedules'" [queryParams]="{gamedate:gamedate.gamedate, referee:5}" class="btn btn-primary btn-block" [disabled]="gamedate.tobeassigned == 0 ? 'disabled' : ''">{{ gamedate.tobeassigned }}</button></td>
+              <td *ngIf="isAdmin()"><button [routerLink]="'/schedules'" [queryParams]="{gamedate:gamedate.gamedate, referee:-998}" class="btn btn-primary btn-block" [disabled]="gamedate.tobeaccepted == 0 ? 'disabled' : ''">{{ gamedate.tobeaccepted }}</button></td>
               <td [ngClass]="'status' + gamedate.signupstatus + (isAdmin() ? ' statusadmin' : '')">{{ gamedate.signup}}</td>
           </tr>
       </ng-container>
